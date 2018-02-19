@@ -18,18 +18,10 @@ type Controller struct {
 }
 
 func New(devMode bool, store utils.Store, t *utils.Telemetry) (*Controller, error) {
-	var vv utils.PWM
-	pwmConf := utils.DefaultPWMConfig
-	pwmConf.DevMode = devMode
-	pwm, err := utils.NewPWM(pwmConf)
-	if err != nil {
-		return nil, err
-	}
-	vv = pwm
 	return &Controller{
 		DevMode:   devMode,
 		store:     store,
-		vv:        vv,
+		vv:        utils.NewRPIPWMDriver(devMode),
 		cronIDs:   make(map[string]cron.EntryID),
 		telemetry: t,
 		mu:        &sync.Mutex{},

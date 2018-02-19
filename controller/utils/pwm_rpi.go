@@ -9,10 +9,14 @@ type rpiDriver struct {
 	driver pwm.Driver
 }
 
-func NewRPIPWMDriver() PWM {
-	return &rpiDriver{
-		driver: pwm.New(),
+func NewRPIPWMDriver(devMode bool) PWM {
+	d := &rpiDriver{
+		driver: pwm.Mock(),
 	}
+	if !devMode {
+		d.driver = pwm.New()
+	}
+	return d
 }
 func (d *rpiDriver) Start() error {
 	return nil
